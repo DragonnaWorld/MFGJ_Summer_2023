@@ -1,0 +1,12 @@
+using UnityEngine;
+
+public class NPCInfo : MonoBehaviour
+{
+    public Rigidbody RgBody { get; private set; }
+    public Movement Movement { get; private set; }
+    private void Start()
+    {
+        RgBody = GetComponent<Rigidbody>();
+        Movement = GetComponent<Movement>();
+    }
+}
