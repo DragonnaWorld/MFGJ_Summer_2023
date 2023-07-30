@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Testing NPC implementation using abstract classes.
+/// </summary>
+
 public struct NPCCommand
 {
     public enum Type { Move };

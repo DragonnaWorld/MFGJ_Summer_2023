@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Components for moving a game object.
+/// </summary>
+
 public enum OmniDirection
 {
     Left = 1,

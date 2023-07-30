@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Abstract classes using model-controller pattern.
+/// In each update, AIController will process the entity based on given information.
+/// Then, commands are handed over to AIModel class, where the model **tries** to accomplish the commands given.
+/// </summary>
+
 public enum CommandStatus
 {
     NotGiven, OnGoing, Finished, Failed

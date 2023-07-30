@@ -1,5 +1,9 @@
 using UnityEngine;
 
+/// <summary>
+/// Information needed to update and control an NPC.
+/// </summary>
+
 public class NPCInfo : MonoBehaviour
 {
     public Rigidbody RgBody { get; private set; }
