@@ -34,10 +34,10 @@ public class SpriteFlipper : MonoBehaviour
             item.SetActive(true);
         foreach (var item in right)
             item.SetActive(false);
-        var rotation = parent.rotation;
+        var rotation = parent.localRotation;
         float yRotation = faceLeft ? 0 : 180;
         rotation = Quaternion.Euler(rotation.eulerAngles.x, yRotation, rotation.eulerAngles.z);
-        parent.rotation = rotation;
+        parent.localRotation = rotation;
     }
 
     [ContextMenu("Right")]
