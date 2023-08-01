@@ -16,7 +16,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ground
+    uniqueID: 1398162509
+    locked: 0
+  - name: Shadow
+    uniqueID: 1889660609
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

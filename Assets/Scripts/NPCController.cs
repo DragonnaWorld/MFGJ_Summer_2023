@@ -42,6 +42,5 @@ public class NPCController : AIController<NPCCommand, NPCInfo>
             Direction = directions[UnityEngine.Random.Range(0, directions.Length - 1)]
         };
         commands.Add(directionCommand);
-        Debug.Log(directionCommand.Direction);
     }
 }
