@@ -36,6 +36,9 @@ public class Movement : MonoBehaviour
         if (direction.HasFlag(OmniDirection.Right)) velocity.x += 1;
         if (direction.HasFlag(OmniDirection.Up)) velocity.z += 1;
         if (direction.HasFlag(OmniDirection.Down)) velocity.z -= 1;
-        rgbody.velocity = velocity.normalized * Speed;
+
+        velocity = velocity.normalized * Speed;
+
+        rgbody.velocity = new(velocity.x, rgbody.velocity.y, velocity.z);
     }
 }
