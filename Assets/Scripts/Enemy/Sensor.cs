@@ -1,9 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Each sensor has a weight associated to it, which is interpolated from the spread angle
+/// </summary>
+
 [ExecuteInEditMode]
 public class Sensor : MonoBehaviour
 {
+    public struct HitInfo
+    {
+        public float weight;
+        public bool hit;
+        public float ratio;
+        public GameObject visibleObject;
+        
+        public HitInfo(float weight, bool hit, float ratio, GameObject visibleObject)
+        {
+            this.weight = Mathf.Clamp01(weight);
+            this.hit = hit;
+            this.ratio = ratio;
+            this.visibleObject = visibleObject;
+        }
+    }
+
+    [SerializeField]
+    string[] visibleLayers;
+    int layerMask;
+
     [SerializeField]
     Transform origin;
     [SerializeField]
@@ -21,39 +45,68 @@ public class Sensor : MonoBehaviour
     public int Count { get; private set; }
 
     [field: SerializeField]
-    [field: Range(0, 360)]
+    [field: Range(0F, 360F)]
     [field: Tooltip("Angle of spread")]
-    public uint Angle { get; private set; }
+    public float Angle { get; private set; }
 
     readonly List<Vector3> sensorsLocalSpace = new();
     readonly List<Vector3> sensorsGlobalSpace = new();
-    readonly List<float> sensorRatios = new();
+    readonly List<HitInfo> sensorsStatus = new();
     Vector3 emissionPoint;
-
+    public float RotationAroundYAxis { get; set; }
 
     private void Start()
     {
         sensorsLocalSpace.Capacity = Count;
         sensorsGlobalSpace.Capacity = Count;
-        sensorRatios.Capacity = Count;
+        sensorsStatus.Capacity = Count;
 
         InitializeLocalSensors();
-        Update();
+        CalculateLayerMask();
     }
 
     void Update()
     {
-        emissionPoint = transform.position + offset;
+        var rotation = origin.rotation.eulerAngles + new Vector3(0, RotationAroundYAxis, 0);
+        origin.rotation = Quaternion.Euler(rotation);
+        emissionPoint = origin.position + origin.TransformDirection(offset);
+        rotation.y -= RotationAroundYAxis;
+        origin.rotation = Quaternion.Euler(rotation);
+
+        UpdateGlobalSensors();
+    }
+
+    void UpdateGlobalSensors()
+    {
         sensorsGlobalSpace.Clear();
+        var rotation = origin.rotation.eulerAngles + new Vector3(0, RotationAroundYAxis, 0);
+        origin.rotation = Quaternion.Euler(rotation);
         foreach (var sensor in sensorsLocalSpace)
         {
             sensorsGlobalSpace.Add(origin.TransformDirection(sensor));
         }
+        rotation.y -= RotationAroundYAxis;
+        origin.rotation = Quaternion.Euler(rotation);
     }
 
-    public float[] GetCurrentStatus()
+    public HitInfo[] GetCurrentStatus()
     {
-        return null;
+        sensorsStatus.Clear();
+        for (int sensorIndex = 0; sensorIndex < Count; ++sensorIndex)
+        {
+            Vector3 sensor = sensorsGlobalSpace[sensorIndex];
+            HitInfo info;
+            float weight = 2F * (sensorIndex / (float)(Count - 1) - 0.5F);
+            if (Physics.Raycast(emissionPoint, sensor, out RaycastHit hitInfo, Length, layerMask))
+            {
+                info = new(weight, true, hitInfo.distance / Length, hitInfo.collider.gameObject);
+            }
+            else
+                info = new(weight, false, -1, null);
+            sensorsStatus.Add(info);
+        }
+
+        return sensorsStatus.ToArray();
     }
 
     private void InitializeLocalSensors()
@@ -82,10 +135,18 @@ public class Sensor : MonoBehaviour
             Debug.DrawRay(emissionPoint, sensor, Color.green);
     }
 
+    void CalculateLayerMask()
+    {
+        layerMask = 0;
+        foreach (string layer in visibleLayers)
+            layerMask |= LayerMask.NameToLayer(layer);
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {
         InitializeLocalSensors();
+        CalculateLayerMask();
     }
     private void OnDrawGizmosSelected()
     {
