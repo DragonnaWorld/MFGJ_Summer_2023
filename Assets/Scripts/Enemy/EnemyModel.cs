@@ -29,7 +29,7 @@ public class EnemyModel : Internal.IModel<EnemyCommand, EnemyInfo>
         if (runningRight)
             info.SpriteFlipper.TurnRight();
 
-        info.Sensor.RotationAroundYAxis = 90 - info.Movement.CurrentAngleToOx;
+        info.Sensor.RotationAroundYAxis = info.Movement.CurrentAngle;
         base.Update();
     }
 }

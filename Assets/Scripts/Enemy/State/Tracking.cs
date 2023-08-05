@@ -52,18 +52,17 @@ namespace Enemy
 
         void StopMovement()
         {
-            info.Movement.AbortAllTurn();
+            info.Movement.SetTurn(0);
             info.Movement.SetSpeed(0F);
         }
 
         void AdvanceToPosition(Vector3 position)
         {
             var direction = position - info.transform.position;
-            float directionAngleToOx = Mathf.Rad2Deg * Mathf.Acos(direction.x / direction.magnitude) * Mathf.Sign(direction.z);
-            float angleDelta = AngleNormalizer.ShortestDifference360(info.Movement.CurrentAngleToOx, directionAngleToOx);
-            info.Movement.AbortAllTurn();
+            float directionAngle = Mathf.Rad2Deg * Mathf.Acos(direction.z / direction.magnitude) * Mathf.Sign(direction.x);
+            float angleDelta = AngleNormalizer.ShortestDifference360(info.Movement.CurrentAngle, directionAngle);
             info.Movement.SetSpeed(1F);
-            info.Movement.AddTurn(-angleDelta);
+            info.Movement.SetTurn(Mathf.Sign(angleDelta));
         }
     }
 }

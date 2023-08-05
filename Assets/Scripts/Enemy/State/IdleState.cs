@@ -34,9 +34,9 @@ namespace Enemy
 
         void InitializeObservation()
         {
-            observationTime = observationInterval + angleAtEachObservation / info.Movement.AngularSpeed;
+            observationTime = observationInterval + angleAtEachObservation / info.Movement.MaxAngularSpeed;
             observationDeltaTime = observationTime;
-            info.Movement.AddTurn(angleAtEachObservation);
+            info.Movement.SetTurn(Mathf.Sign(angleAtEachObservation));
         }
 
         public override HashSet<EnemyCommand> Update()
@@ -44,6 +44,8 @@ namespace Enemy
             movingDeltaTime -= Time.deltaTime;
             observationDeltaTime -= Time.deltaTime;
 
+            if (observationDeltaTime < observationInterval)
+                info.Movement.SetTurn(0);
             if (observationDeltaTime < 0)
             {
                 InitializeObservation();
@@ -87,7 +89,7 @@ namespace Enemy
 
         public override void Deactivate()
         {
-            info.Movement.AbortAllTurn();
+            info.Movement.SetTurn(0);
             info.Movement.SetSpeed(0);
         }
     }

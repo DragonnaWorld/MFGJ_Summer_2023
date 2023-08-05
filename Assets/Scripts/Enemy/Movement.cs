@@ -41,57 +41,28 @@ public class Movement : MonoBehaviour
     [field: SerializeField]
     [field: Range(10F, 1000F)]
     [field: Tooltip("Angular speed in degree")]
-    public float AngularSpeed { get; private set; }
+    public float MaxAngularSpeed { get; private set; }
 
-    readonly Queue<float> turnsQueued = new();
-    float currentSpeed = 0;
-    public float CurrentAngleToOx { get; private set; } = 90F;
-    float currentAngleDelta = 0;
-    float targetAngleDelta = 0;
-    bool turningClockwise;
+    public float CurrentSpeed { get; private set; } = 0;
+    public float CurrentAngle { get; private set; } = 0;
+    public float CurrentAngularSpeed { get; private set; } = 0;
 
 
     private void FixedUpdate()
     {
-        UpdateTurn();
-        float angleInRad = CurrentAngleToOx * Mathf.Deg2Rad;
-        rgbody.velocity = new(currentSpeed * Mathf.Cos(angleInRad), rgbody.velocity.y, currentSpeed * Mathf.Sin(angleInRad));
+        CurrentAngle += CurrentAngularSpeed * Time.fixedDeltaTime;
+        float angleInRad = CurrentAngle * Mathf.Deg2Rad;
+        rgbody.velocity = new(CurrentSpeed * Mathf.Sin(angleInRad), rgbody.velocity.y, CurrentSpeed * Mathf.Cos(angleInRad));
     }
 
-    private void UpdateTurn()
+    public void SetTurn(float ratioToMaxAngularSpeed)
     {
-        bool turnFinished = targetAngleDelta < currentAngleDelta;
-        if (!turnFinished)
-        {
-            CurrentAngleToOx = AngleNormalizer.Add360(CurrentAngleToOx, 
-                AngularSpeed * Time.deltaTime * (turningClockwise ? -1 : 1));
-            currentAngleDelta += AngularSpeed * Time.deltaTime;
-        }
-        else if (turnsQueued.Count != 0)
-        {
-            currentAngleDelta = 0;
-            float nextTurn = turnsQueued.Dequeue();
-            targetAngleDelta = Mathf.Abs(nextTurn);
-            turningClockwise = nextTurn > 0;
-        }
-        else
-        {
-            targetAngleDelta = 0;
-        }
-    }
-
-    public void AddTurn(float degreeAntiClockwise)
-    {
-        turnsQueued.Enqueue(degreeAntiClockwise);
-    }   
-
-    public void AbortAllTurn()
-    {
-        turnsQueued.Clear();
+        ratioToMaxAngularSpeed = Mathf.Clamp(ratioToMaxAngularSpeed, -1, 1);
+        CurrentAngularSpeed = MaxAngularSpeed * ratioToMaxAngularSpeed;
     }
 
     public void SetSpeed(float ratioToMaxSpeed)
     {
-        currentSpeed = MaxSpeed * Mathf.Clamp01(ratioToMaxSpeed);
+        CurrentSpeed = MaxSpeed * Mathf.Clamp01(ratioToMaxSpeed);
     }
 }
