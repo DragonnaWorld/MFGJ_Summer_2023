@@ -1,17 +1,20 @@
 using System.Collections.Generic;
 
-public class EnemyController 
-    : Internal.StateMachine<EnemyState, EnemyCommand, EnemyInfo>, Internal.IController<EnemyCommand>
+namespace Internal
 {
-    public EnemyController(EnemyModel model)
-        : base(model.Info, EnemyState.Idle)
-    { 
-        Register<Enemy.IdleState>(EnemyState.Idle);
-        Register<Enemy.TrackState>(EnemyState.Track);
-    }
-
-    public HashSet<EnemyCommand> Process()
+    public class EnemyController
+        : StateMachine<EnemyState, EnemyCommand, EnemyInfo>, IController<EnemyCommand>
     {
-        return Update();
-    } 
+        public EnemyController(EnemyModel model)
+            : base(model.Info, EnemyState.Idle)
+        {
+            Register<Enemy.IdleState>(EnemyState.Idle);
+            Register<Enemy.TrackState>(EnemyState.Track);
+        }
+
+        public HashSet<EnemyCommand> Process()
+        {
+            return Update();
+        }
+    }
 }

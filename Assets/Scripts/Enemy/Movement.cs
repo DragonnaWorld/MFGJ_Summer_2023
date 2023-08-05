@@ -5,6 +5,29 @@ using UnityEngine;
 /// Components for moving NPC
 /// </summary>
 
+public static class AngleNormalizer
+{
+    public static float Normalize360(float angle)
+    {
+        return angle - Mathf.Floor(angle / 360F) * 360F;
+    }
+
+    public static float ShortestDifference360(float begin, float end)
+    {
+        float res = Normalize360(end) - Normalize360(begin);
+        if (res > 180F)
+            return res - 360F;
+        if (res < -180F)
+            return res + 360F;
+        return res;
+    }
+
+    public static float Add360(float value, float addition)
+    {
+        return Normalize360(value + addition);
+    }
+}
+
 public class Movement : MonoBehaviour
 {
     [SerializeField]
@@ -40,7 +63,8 @@ public class Movement : MonoBehaviour
         bool turnFinished = targetAngleDelta < currentAngleDelta;
         if (!turnFinished)
         {
-            CurrentAngleToOx += AngularSpeed * Time.deltaTime * (turningClockwise ? -1 : 1);
+            CurrentAngleToOx = AngleNormalizer.Add360(CurrentAngleToOx, 
+                AngularSpeed * Time.deltaTime * (turningClockwise ? -1 : 1));
             currentAngleDelta += AngularSpeed * Time.deltaTime;
         }
         else if (turnsQueued.Count != 0)

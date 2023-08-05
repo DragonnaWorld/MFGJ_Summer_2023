@@ -4,7 +4,7 @@ public class EnemyModel : Internal.IModel<EnemyCommand, EnemyInfo>
 {
     protected override void InitilizeController()
     {
-        controller = new EnemyController(this);
+        controller = new Internal.EnemyController(this);
     }
 
     protected override void ReceiveCommands(HashSet<EnemyCommand> commands)
@@ -21,6 +21,14 @@ public class EnemyModel : Internal.IModel<EnemyCommand, EnemyInfo>
 
     protected override void Update()
     {
+        float epsilon = 1e-5F;
+        bool runningLeft = info.Rigidbody.velocity.x < -epsilon;
+        bool runningRight = info.Rigidbody.velocity.x > epsilon;
+        if (runningLeft)
+            info.SpriteFlipper.TurnLeft();
+        if (runningRight)
+            info.SpriteFlipper.TurnRight();
+
         info.Sensor.RotationAroundYAxis = 90 - info.Movement.CurrentAngleToOx;
         base.Update();
     }

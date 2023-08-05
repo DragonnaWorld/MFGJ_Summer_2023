@@ -6,6 +6,7 @@ namespace Enemy
     public class IdleState : Internal.State<EnemyState, EnemyCommand, EnemyInfo>
     {
         float movingInterval;
+        float movingTime;
         float observationInterval;
 
         float speedMultiplier;
@@ -19,6 +20,7 @@ namespace Enemy
         public override void Activate()
         {
             movingInterval = info.movingInterval;
+            movingTime = info.movingTime;
             observationInterval = info.observationInterval;
             speedMultiplier = info.speedMultiplier;
             angleAtEachObservation = info.angleAtEachObservation;
@@ -26,6 +28,8 @@ namespace Enemy
             InitializeObservation();
             movingDeltaTime = movingInterval;
             stopping = true;
+
+            Debug.Log("Enter idle mode");
         }
 
         void InitializeObservation()
@@ -46,19 +50,39 @@ namespace Enemy
             }
             if (movingDeltaTime < 0)
             {
-                movingDeltaTime = movingInterval;
                 if (stopping)
                 {
+                    movingDeltaTime = movingTime;
                     stopping = false;
                     info.Movement.SetSpeed(speedMultiplier);
                 }
                 else
                 {
+                    movingDeltaTime = movingInterval;
                     stopping = true;
                     info.Movement.SetSpeed(0);
                 }
             }
+
+            CheckSensors();
+
             return null;
+        }
+
+        void CheckSensors()
+        {
+            var sensorInfo = info.Sensor.GetCurrentStatus();
+            foreach (var sensor in sensorInfo)
+            {
+                string tag = (sensor.visibleObject == null) ? string.Empty : sensor.visibleObject.tag;
+                bool isAttackTarget = info.RelationshipTable.RelationshipTo(tag) == Internal.Relationship.Attack;
+                if (isAttackTarget)
+                {
+                    info.target = sensor.visibleObject;
+                    ChangeState(EnemyState.Track);
+                    break;
+                }
+            }
         }
 
         public override void Deactivate()

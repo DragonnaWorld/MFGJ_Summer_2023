@@ -62,6 +62,7 @@ public class Sensor : MonoBehaviour
         sensorsStatus.Capacity = Count;
 
         InitializeLocalSensors();
+        UpdateGlobalSensors();
         CalculateLayerMask();
     }
 
@@ -100,9 +101,22 @@ public class Sensor : MonoBehaviour
             if (Physics.Raycast(emissionPoint, sensor, out RaycastHit hitInfo, Length, layerMask))
             {
                 info = new(weight, true, hitInfo.distance / Length, hitInfo.collider.gameObject);
+#if UNITY_EDITOR
+                if (Application.isPlaying)
+                {
+                    Debug.DrawRay(emissionPoint, sensor.normalized * hitInfo.distance, Color.red);
+                }
+#endif
             }
             else
+            {
                 info = new(weight, false, -1, null);
+
+#if UNITY_EDITOR
+                if (Application.isPlaying)
+                    Debug.DrawRay(emissionPoint, sensor, Color.green);
+#endif
+            }
             sensorsStatus.Add(info);
         }
 
@@ -139,7 +153,7 @@ public class Sensor : MonoBehaviour
     {
         layerMask = 0;
         foreach (string layer in visibleLayers)
-            layerMask |= LayerMask.NameToLayer(layer);
+            layerMask |= (1 << LayerMask.NameToLayer(layer));
     }
 
 #if UNITY_EDITOR
