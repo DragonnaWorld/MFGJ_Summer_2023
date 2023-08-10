@@ -4,65 +4,19 @@ using UnityEngine;
 
 namespace Enemy
 {
-    public class TrackState : Internal.State<EnemyState, EnemyCommand, EnemyInfo>
+    public class TrackState : Internal.State<EnemyState, EnemyInfo>
     {
-        Vector3 lastSeenPosition;
-        float acceptableRange;
 
         public override void Activate()
         {
-            Debug.Log("Entered tracking mode");
-            lastSeenPosition = info.target.transform.position;
-            acceptableRange = info.acceptableRange;
         }
 
-        public override HashSet<EnemyCommand> Update()
+        public override void Update()
         {
-            var sensorsInfo = info.Sensor.GetCurrentStatus();
-
-            bool targetStillInSight = false;
-            bool inAcceptableRange = false;
-            foreach (var sensor in sensorsInfo)
-                if (sensor.visibleObject == info.target)
-                {
-                    targetStillInSight = true;
-                    lastSeenPosition = sensor.visibleObject.transform.position;
-                    inAcceptableRange = sensor.ratio * info.Sensor.Length <= acceptableRange;
-                    break;
-                }
-    
-            if (!targetStillInSight)
-                inAcceptableRange = Vector3.Distance(info.transform.position, lastSeenPosition) <= acceptableRange;   
-
-            if (!inAcceptableRange)
-                AdvanceToPosition(lastSeenPosition);
-            else if (targetStillInSight)
-            {
-                StopMovement();
-                // Do some attack I guess
-            }
-            else
-            {
-                StopMovement();
-                ChangeState(EnemyState.Idle);
-            }
-
-            return null;
         }
 
-        void StopMovement()
+        public override void Deactivate()
         {
-            info.Movement.SetTurn(0);
-            info.Movement.SetSpeed(0F);
-        }
-
-        void AdvanceToPosition(Vector3 position)
-        {
-            var direction = position - info.transform.position;
-            float directionAngle = Mathf.Rad2Deg * Mathf.Acos(direction.z / direction.magnitude) * Mathf.Sign(direction.x);
-            float angleDelta = AngleNormalizer.ShortestDifference360(info.Movement.CurrentAngle, directionAngle);
-            info.Movement.SetSpeed(1F);
-            info.Movement.SetTurn(Mathf.Sign(angleDelta));
         }
     }
 }

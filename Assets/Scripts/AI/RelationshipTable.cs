@@ -22,7 +22,7 @@ namespace Internal
         {
             table = new()
             {
-                { Relationship.Attack, new HashSet<string> { "Player", "Enemy" } }
+                { Relationship.Attack, new HashSet<string> { "Player" } }
             }
         };
     }

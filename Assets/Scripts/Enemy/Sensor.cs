@@ -3,6 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// Each sensor has a weight associated to it, which is interpolated from the spread angle
+/// Left = -1F
+/// Right = 1F
 /// </summary>
 
 [ExecuteInEditMode]
@@ -31,7 +33,7 @@ public class Sensor : MonoBehaviour
     [SerializeField]
     Transform origin;
     [SerializeField]
-    [Tooltip("Offset of the root from origin")]
+    [Tooltip("Offset of the root in origin's local space")]
     Vector3 offset;
 
     [field: SerializeField]
@@ -52,7 +54,9 @@ public class Sensor : MonoBehaviour
     readonly List<Vector3> sensorsLocalSpace = new();
     readonly List<Vector3> sensorsGlobalSpace = new();
     readonly List<HitInfo> sensorsStatus = new();
+    bool infoCached = false;
     Vector3 emissionPoint;
+
     public float RotationAroundYAxis { get; set; }
 
     private void Start()
@@ -68,6 +72,7 @@ public class Sensor : MonoBehaviour
 
     void Update()
     {
+        infoCached = false;
         var rotation = origin.rotation.eulerAngles + new Vector3(0, RotationAroundYAxis, 0);
         origin.rotation = Quaternion.Euler(rotation);
         emissionPoint = origin.position + origin.TransformDirection(offset);
@@ -92,6 +97,9 @@ public class Sensor : MonoBehaviour
 
     public HitInfo[] GetCurrentStatus()
     {
+        if (infoCached)
+            return sensorsStatus.ToArray();
+
         sensorsStatus.Clear();
         for (int sensorIndex = 0; sensorIndex < Count; ++sensorIndex)
         {
@@ -120,6 +128,7 @@ public class Sensor : MonoBehaviour
             sensorsStatus.Add(info);
         }
 
+        infoCached = true;
         return sensorsStatus.ToArray();
     }
 
@@ -143,12 +152,6 @@ public class Sensor : MonoBehaviour
         }
     }
 
-    void VisualizeSensors()
-    {
-        foreach (var sensor in sensorsGlobalSpace)
-            Debug.DrawRay(emissionPoint, sensor, Color.green);
-    }
-
     void CalculateLayerMask()
     {
         layerMask = 0;
@@ -160,11 +163,11 @@ public class Sensor : MonoBehaviour
     private void OnValidate()
     {
         InitializeLocalSensors();
-        CalculateLayerMask();
     }
     private void OnDrawGizmosSelected()
     {
-        VisualizeSensors();
+        foreach (var sensor in sensorsGlobalSpace)
+            Debug.DrawRay(emissionPoint, sensor, Color.green);
     }
 #endif
 }

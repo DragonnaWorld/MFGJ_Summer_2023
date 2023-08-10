@@ -1,35 +1,21 @@
-using System.Collections.Generic;
+using Internal;
 
-public class EnemyModel : Internal.IModel<EnemyCommand, EnemyInfo>
+public class EnemyModel : IModel<EnemyInfo>
 {
-    protected override void InitilizeController()
+    protected override IController<EnemyInfo> CreateController(EnemyInfo info)
     {
-        controller = new Internal.EnemyController(this);
+        return new EnemyController(info);
     }
 
-    protected override void ReceiveCommands(HashSet<EnemyCommand> commands)
+    protected override void UpdateModel()
     {
-        foreach (EnemyCommand command in commands)
-        {
-            switch (command.Command)
-            {
-                case EnemyCommand.Type.Attack:
-                    break;
-            }
-        }
-    }
-
-    protected override void Update()
-    {
-        float epsilon = 1e-5F;
-        bool runningLeft = info.Rigidbody.velocity.x < -epsilon;
-        bool runningRight = info.Rigidbody.velocity.x > epsilon;
+        bool runningLeft = info.Rigidbody.velocity.x < -1;
+        bool runningRight = info.Rigidbody.velocity.x > 1;
         if (runningLeft)
             info.SpriteFlipper.TurnLeft();
-        if (runningRight)
+        else if (runningRight)
             info.SpriteFlipper.TurnRight();
 
         info.Sensor.RotationAroundYAxis = info.Movement.CurrentAngle;
-        base.Update();
     }
 }

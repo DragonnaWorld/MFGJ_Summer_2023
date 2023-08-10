@@ -2,18 +2,18 @@
 
 namespace Internal
 {
-    public abstract class State<StateEnums, Commands, ModelInfo>
+    public abstract class State<StateEnums, ModelInfo>
     {
-        protected StateMachine<StateEnums, Commands, ModelInfo> stateMachine;
+        protected StateMachine<StateEnums, ModelInfo> stateMachine;
         protected ModelInfo info;
 
-        public void Initialize(StateMachine<StateEnums, Commands, ModelInfo> stateMachine) 
+        public void Initialize(StateMachine<StateEnums, ModelInfo> stateMachine) 
         {
             this.stateMachine = stateMachine;
-            info = stateMachine.GetModelInfo();
+            info = stateMachine.Info;
         }
         public virtual void Activate() { }
-        public abstract HashSet<Commands> Update();
+        public abstract void Update();
         public virtual void Deactivate() { }
 
         protected void ChangeState(StateEnums newState)
@@ -22,33 +22,31 @@ namespace Internal
         }
     }
 
-    public class StateMachine<StateEnums, Commands, ModelInfo>
+    public class StateMachine<StateEnums, ModelInfo> : IController<ModelInfo>
     {
-        readonly ModelInfo info;
-        readonly Dictionary<StateEnums, State<StateEnums, Commands, ModelInfo>> states = new();
-        readonly HashSet<Commands> emptyCommandSet = new();
+        readonly Dictionary<StateEnums, State<StateEnums, ModelInfo>> states = new();
         
         StateEnums currentState;
         StateEnums pendingState;
         bool stateChanged = false;
 
         public StateMachine(ModelInfo info, StateEnums startState)
+            : base(info)
         {
-            this.info = info;
             ChangeState(startState);
         }
 
         public void Register<DerivedState>(StateEnums stateType)
-            where DerivedState : State<StateEnums, Commands, ModelInfo>, new()
+            where DerivedState : State<StateEnums, ModelInfo>, new()
         {
-            State<StateEnums, Commands, ModelInfo> state = new DerivedState();
+            var state = new DerivedState();
             state.Initialize(this);
             states.Add(stateType, state);
         }
 
-        public HashSet<Commands> Update()
+        public override void Update()
         {
-            var res = states[currentState].Update();
+            states[currentState].Update();
 
             if (stateChanged)
             {
@@ -57,19 +55,12 @@ namespace Internal
                 currentState = pendingState;
                 stateChanged = false;
             }
-
-            return res == null ? emptyCommandSet : res;
         }
 
         public void ChangeState(StateEnums newState)
         {
             pendingState = newState;
             stateChanged = true;
-        }
-
-        public ModelInfo GetModelInfo()
-        {
-            return info;
         }
     }
 }

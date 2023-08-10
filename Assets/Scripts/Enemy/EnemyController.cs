@@ -3,18 +3,13 @@ using System.Collections.Generic;
 namespace Internal
 {
     public class EnemyController
-        : StateMachine<EnemyState, EnemyCommand, EnemyInfo>, IController<EnemyCommand>
+        : StateMachine<EnemyState, EnemyInfo>
     {
-        public EnemyController(EnemyModel model)
-            : base(model.Info, EnemyState.Idle)
+        public EnemyController(EnemyInfo info)
+            : base(info, EnemyState.Idle)
         {
             Register<Enemy.IdleState>(EnemyState.Idle);
             Register<Enemy.TrackState>(EnemyState.Track);
-        }
-
-        public HashSet<EnemyCommand> Process()
-        {
-            return Update();
         }
     }
 }

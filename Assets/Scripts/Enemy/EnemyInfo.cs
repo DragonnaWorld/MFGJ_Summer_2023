@@ -7,26 +7,25 @@ public class EnemyInfo : MonoBehaviour
     public RelationshipTable RelationshipTable = RelationshipTable.Enemy;
 
     [Header("Components")]
+
     [HideInInspector]
     public Sensor Sensor;
+
     [HideInInspector]
     public Movement Movement;
+
     [HideInInspector]
     public Rigidbody Rigidbody;
+
     public SpriteFlipper SpriteFlipper;
 
-    [Header("Idle")]
-    public float movingInterval;
-    public float movingTime;
-    public float observationInterval;
+    [Header("Animation")]
 
-    public float speedMultiplier;
-    public float angleAtEachObservation;
+    public Animator Animator;
 
-    [Header("Tracking")]
-    [HideInInspector]
-    public GameObject target;
-    public float acceptableRange;
+    // [Header("Idle")]
+
+    // [Header("Tracking")]
 
     private void Start()
     {
@@ -39,15 +38,4 @@ public class EnemyInfo : MonoBehaviour
 public enum EnemyState
 {
     Idle, Track,
-}
-
-public struct EnemyCommand
-{
-    public enum Type
-    {
-        Attack
-    }
-
-    public Type Command;
-    public Vector3 AttackPosition;
 }

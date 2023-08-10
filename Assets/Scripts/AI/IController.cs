@@ -1,40 +1,39 @@
-using System.Collections.Generic;
 using UnityEngine;
-
-/// <summary>
-/// Abstract classes using model-controller pattern.
-/// In each update, AIController will process the entity based on given information.
-/// Then, commands are handed over to AIModel class, where the model **tries** to accomplish the commands given.
-/// </summary>
 
 namespace Internal
 {
-    public interface IController<Commands>
+    public abstract class IController<ModelInfo>
     {
-        public abstract HashSet<Commands> Process();
+        public ModelInfo Info { get; private set; }
+        protected IController(ModelInfo info)
+        {
+           Info = info;
+        }
+
+        public abstract void Update();
     }
 
-    public abstract class IModel<Commands, ModelInfo> : MonoBehaviour
+    public abstract class IModel<ModelInfo> : MonoBehaviour
         where ModelInfo : MonoBehaviour
     {
         protected ModelInfo info;
-        protected IController<Commands> controller;
+        IController<ModelInfo> controller;
 
-        protected virtual void Start()
+        private void Start()
         {
             info = GetComponent<ModelInfo>();
-            InitilizeController();
+            controller = CreateController(info);
+            Initialize();
         }
 
-        protected virtual void Update()
+        private void Update()
         {
-            var commands = controller.Process();
-            ReceiveCommands(commands);
+            controller.Update();
+            UpdateModel();
         }
 
-        public ModelInfo Info { get { return info; } }
-
-        protected abstract void ReceiveCommands(HashSet<Commands> commands);
-        protected abstract void InitilizeController();
+        protected abstract IController<ModelInfo> CreateController(ModelInfo info);
+        protected virtual void Initialize() { }
+        protected abstract void UpdateModel();
     }
 }

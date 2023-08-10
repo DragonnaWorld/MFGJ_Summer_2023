@@ -21,11 +21,6 @@ public static class AngleNormalizer
             return res + 360F;
         return res;
     }
-
-    public static float Add360(float value, float addition)
-    {
-        return Normalize360(value + addition);
-    }
 }
 
 public class Movement : MonoBehaviour
@@ -50,7 +45,7 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CurrentAngle += CurrentAngularSpeed * Time.fixedDeltaTime;
+        CurrentAngle = AngleNormalizer.Normalize360(CurrentAngle + CurrentAngularSpeed * Time.fixedDeltaTime);
         float angleInRad = CurrentAngle * Mathf.Deg2Rad;
         rgbody.velocity = new(CurrentSpeed * Mathf.Sin(angleInRad), rgbody.velocity.y, CurrentSpeed * Mathf.Cos(angleInRad));
     }
@@ -59,6 +54,11 @@ public class Movement : MonoBehaviour
     {
         ratioToMaxAngularSpeed = Mathf.Clamp(ratioToMaxAngularSpeed, -1, 1);
         CurrentAngularSpeed = MaxAngularSpeed * ratioToMaxAngularSpeed;
+    }
+
+    public void AddTurn(float ratioToMaxAngularSpeed)
+    {
+        SetTurn(CurrentAngularSpeed / MaxAngularSpeed + ratioToMaxAngularSpeed);
     }
 
     public void SetSpeed(float ratioToMaxSpeed)
