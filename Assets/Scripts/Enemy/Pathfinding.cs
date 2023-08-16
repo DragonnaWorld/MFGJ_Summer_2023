@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -22,18 +21,17 @@ public class Pathfinding : MonoBehaviour
         remaining -= Time.deltaTime;
         if (remaining < 0)
         {
-            Visualise();
+            FindPath();
             remaining = refreshInterval;
         }
     }
 
     [ContextMenu("Visualise")]
-    public void Visualise()
+    public void FindPath()
     {
         if (builder.Available && builder.AStarPathfinding(transform.position, target.position, out List<Vector3> path))
         {
             this.path = path;
-            Debug.Log($"total: {path.Count}, start: {path[0]}, end: {path.Last()}");
         }
     }
 #if UNITY_EDITOR

@@ -16,7 +16,7 @@ public interface IHeuristic<T>
 public class Search<Coord>
 {
     readonly Dictionary<int, float> costs;
-    readonly Dictionary<int, HashSet<int>> adjacent;
+    readonly Dictionary<int, Dictionary<int, float>> adjacent;
     readonly IIndexHasher<Coord> indexHasher;
 
     public Search(IIndexHasher<Coord> indexHasher)
@@ -33,16 +33,18 @@ public class Search<Coord>
         adjacent.Add(index, new());
     }
 
-    public void Connect(Coord coordinate, List<Coord> adj) 
+    public void Connect(Coord coordinate, List<Tuple<Coord, float>> adj) 
     {
         int index = indexHasher.Hash(coordinate);
-        foreach (var coord in adj)
+        foreach (var edge in adj)
         {
-            int neighbor = indexHasher.Hash(coord);
+            int neighbor = indexHasher.Hash(edge.Item1);
             if (!costs.ContainsKey(neighbor))
                 throw new ArgumentException("Some adjacent nodes are not added yet");
-            adjacent[index].Add(neighbor);
-            adjacent[neighbor].Add(index);
+            if (!adjacent[index].ContainsKey(neighbor))
+                adjacent[index].Add(neighbor, edge.Item2);
+            if (!adjacent[neighbor].ContainsKey(index))
+                adjacent[neighbor].Add(index, edge.Item2);
         }
     }
 
@@ -85,15 +87,14 @@ public class Search<Coord>
                 path.Reverse();
                 return true;
             }
-            foreach (var next in adjacent[currentIndex])
+            foreach (var edge in adjacent[currentIndex])
             {
-                bool visited = (next == startIndex) || visitCost.ContainsKey(next);
-                // priority = -cost from start - heuristic
+                bool visited = (edge.Key == startIndex) || visitCost.ContainsKey(edge.Key);
                 if (!visited)
                 {
-                    backtrace.Add(next, currentIndex);
-                    visitCost.Add(next, visitCost[currentIndex] + costs[next]);
-                    toBeVisited.Enqueue(next, visitCost[next] + heuristic.Get(indexHasher.Revert(next), endCoord));
+                    backtrace.Add(edge.Key, currentIndex);
+                    visitCost.Add(edge.Key, visitCost[currentIndex] + costs[edge.Key] + edge.Value);
+                    toBeVisited.Enqueue(edge.Key, visitCost[edge.Key] + heuristic.Get(indexHasher.Revert(edge.Key), endCoord));
                 }
             }
         }

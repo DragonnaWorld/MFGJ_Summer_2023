@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Vec3IHasher : IIndexHasher<Vector3Int>
@@ -124,7 +125,7 @@ public class TerrainBuilder : MonoBehaviour
                         continue;
 
                     validTileLists.Add(tile);
-                    pathfinder.Add(tile, 14);
+                    pathfinder.Add(tile, 1);
                 }
         // Add pathfinder connections
         for (int x = -Dimension.x / 2; x <= Dimension.x / 2; ++x)
@@ -134,17 +135,17 @@ public class TerrainBuilder : MonoBehaviour
                     var tile = new Vector3Int(x, y, z);
                     if (!validTileLists.Contains(tile))
                         continue;
-                    List<Vector3Int> adjacents = new();
+                    List<Tuple<Vector3Int, float>> adjacents = new();
                     for (int osx = -1; osx <= 1; ++osx)
-                        for (int osy = -1; osy <= 1; ++osy)
-                            for (int osz = -1; osz <= 1; ++osz)
-                            {
-                                if (osx == 0 && osy == 0 && osz == 0)
-                                    continue;
-                                var adjacentTile = tile + new Vector3Int(osx, osy, osz);
-                                if (validTileLists.Contains(adjacentTile))
-                                    adjacents.Add(adjacentTile);
-                            }
+                        for (int osz = -1; osz <= 1; ++osz)
+                        {
+                            if (osx == 0 && osz == 0)
+                                continue;
+                            var offset = new Vector3Int(osx, 0, osz);
+                            var adjacentTile = tile + offset;
+                            if (validTileLists.Contains(adjacentTile))
+                                adjacents.Add(new (adjacentTile, 2F * offset.magnitude));
+                        }
                     pathfinder.Connect(tile, adjacents);
                 }
     }

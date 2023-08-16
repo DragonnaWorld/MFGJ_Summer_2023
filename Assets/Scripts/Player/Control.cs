@@ -6,6 +6,8 @@ public class Control : MonoBehaviour
     [SerializeField]
     [Range(1F, 100F)]
     float speed;
+    [SerializeField]
+    Animator animator;
 
     private void Start()
     {
@@ -25,5 +27,17 @@ public class Control : MonoBehaviour
             direction.z += 1F;
         Vector3 velocity = direction.normalized * speed;
         rgbody.velocity = new Vector3(velocity.x, rgbody.velocity.y, velocity.z);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            animator.SetBool("QueryAttack", true);
+        }
+        else
+        {
+            animator.SetBool("QueryAttack", false);
+        }
     }
 }
