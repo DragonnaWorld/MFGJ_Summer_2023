@@ -7,14 +7,14 @@ public class SceneChange : MonoBehaviour
 {
     public void Scene1()
     {
-        SceneManager.LoadScene("Scene1");
+        SceneManager.LoadScene("GameModes");
     }
     public void Scene2()
     {
-        SceneManager.LoadScene("Scene2");
+        SceneManager.LoadScene("Gameplay");
     }
     public void Scene3()
     {
-        SceneManager.LoadScene("Scene3");
+        SceneManager.LoadScene("EndingScene");
     }
 }
