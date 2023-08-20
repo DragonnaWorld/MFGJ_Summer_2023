@@ -34,8 +34,3 @@ public class EnemyInfo : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
     }
 }
-
-public enum EnemyState
-{
-    Idle, Track,
-}

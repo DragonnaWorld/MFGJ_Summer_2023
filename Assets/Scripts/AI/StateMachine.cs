@@ -7,13 +7,14 @@ namespace Internal
         protected StateMachine<StateEnums, ModelInfo> stateMachine;
         protected ModelInfo info;
 
-        public void Initialize(StateMachine<StateEnums, ModelInfo> stateMachine) 
+        public void Initialize(StateMachine<StateEnums, ModelInfo> stateMachine)
         {
             this.stateMachine = stateMachine;
             info = stateMachine.Info;
         }
         public virtual void Activate() { }
-        public abstract void Update();
+        public virtual void Update() { }
+        public virtual void FixedUpdate() { }
         public virtual void Deactivate() { }
 
         protected void ChangeState(StateEnums newState)
@@ -47,7 +48,23 @@ namespace Internal
         public override void Update()
         {
             states[currentState].Update();
+            CheckStateChange();
+        }
 
+        public override void FixedUpdate()
+        {
+            states[currentState].FixedUpdate();
+            CheckStateChange();
+        }
+
+        public void ChangeState(StateEnums newState)
+        {
+            pendingState = newState;
+            stateChanged = true;
+        }
+
+        void CheckStateChange()
+        {
             if (stateChanged)
             {
                 states[currentState].Deactivate();
@@ -55,12 +72,6 @@ namespace Internal
                 currentState = pendingState;
                 stateChanged = false;
             }
-        }
-
-        public void ChangeState(StateEnums newState)
-        {
-            pendingState = newState;
-            stateChanged = true;
         }
     }
 }
