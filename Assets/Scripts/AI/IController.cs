@@ -10,7 +10,8 @@ namespace Internal
            Info = info;
         }
 
-        public abstract void Update();
+        public virtual void Update() { }
+        public virtual void FixedUpdate() { }
     }
 
     public abstract class IModel<ModelInfo> : MonoBehaviour
@@ -30,6 +31,11 @@ namespace Internal
         {
             controller.Update();
             UpdateModel();
+        }
+
+        private void FixedUpdate()
+        {
+            controller.FixedUpdate();
         }
 
         protected abstract IController<ModelInfo> CreateController(ModelInfo info);

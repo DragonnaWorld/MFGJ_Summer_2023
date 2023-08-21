@@ -1,5 +1,10 @@
 using System.Collections.Generic;
 
+public enum EnemyState
+{
+    Idle, Track,
+}
+
 namespace Internal
 {
     public class EnemyController
