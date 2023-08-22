@@ -1804,21 +1804,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - timeFromLevelStart: 1
+  - timeFromLevelStart: 5
     creatureList:
     - bounds:
-        m_Center: {x: -20.09, y: 4.19, z: 15.44}
-        m_Extent: {x: 10.98, y: 1, z: 4.98}
+        m_Center: {x: -21.66, y: 4.19, z: -18.2}
+        m_Extent: {x: 24.6, y: 1, z: 3.61}
       creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
     - bounds:
-        m_Center: {x: 9.69, y: 4.19, z: -18.2}
-        m_Extent: {x: 3.9, y: 1, z: 18.22}
+        m_Center: {x: -21.66, y: 4.19, z: -5.7}
+        m_Extent: {x: 24.6, y: 1, z: 3.61}
       creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
-  - timeFromLevelStart: 3
+    - bounds:
+        m_Center: {x: -21.66, y: 4.19, z: 7.4}
+        m_Extent: {x: 24.6, y: 1, z: 3.61}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: -21.66, y: 4.19, z: 20.33}
+        m_Extent: {x: 24.6, y: 1, z: 3.61}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: -21.66, y: 4.19, z: 32.36}
+        m_Extent: {x: 24.6, y: 1, z: 3.61}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: -21.66, y: 4.19, z: 43.1}
+        m_Extent: {x: 24.6, y: 1, z: 3.61}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+  - timeFromLevelStart: 15
     creatureList:
     - bounds:
-        m_Center: {x: 12.85, y: 13.76, z: 15.44}
-        m_Extent: {x: 10.98, y: 1, z: 20.2}
+        m_Center: {x: -24.84, y: 13.76, z: -38.5}
+        m_Extent: {x: 3, y: 1, z: 5.9}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: -14.2, y: 13.76, z: -38.5}
+        m_Extent: {x: 3, y: 1, z: 5.9}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: -4.3, y: 13.76, z: -38.5}
+        m_Extent: {x: 3, y: 1, z: 5.9}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: 5.9, y: 13.76, z: -38.5}
+        m_Extent: {x: 3, y: 1, z: 5.9}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: 15.92, y: 13.76, z: -38.5}
+        m_Extent: {x: 3, y: 1, z: 5.9}
+      creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
+    - bounds:
+        m_Center: {x: 25.17, y: 13.76, z: -38.5}
+        m_Extent: {x: 3, y: 1, z: 5.9}
       creature: {fileID: 931398193806565897, guid: 7c18ec9a84e1b4f4da4bbeabb43d9562, type: 3}
 --- !u!4 &1985277198
 Transform:
