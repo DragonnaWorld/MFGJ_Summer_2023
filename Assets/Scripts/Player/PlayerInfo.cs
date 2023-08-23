@@ -11,7 +11,7 @@ public class PlayerInfo : MonoBehaviour
     [field: SerializeField] public float Speed { get; private set; }
     [field: SerializeField] public float TransitionTime { get; private set; }
 
-    public static readonly string IdleName = "Base Layer.IdleRight";
+    public static readonly string IdleName = "Base Layer.Idle";
     public static readonly string Attack1 = "Base Layer.Attack1";
     public static readonly string Attack2 = "Base Layer.Attack2";
     public static readonly string Attack3 = "Base Layer.Attack3";

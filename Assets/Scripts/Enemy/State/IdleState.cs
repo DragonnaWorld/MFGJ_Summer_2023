@@ -7,11 +7,15 @@ namespace Enemy
     {
         public override void Activate()
         {
-                   
+            info.Animator.Play(EnemyInfo.IdleName);
         }
 
         public override void Update()
         {
+            if (Input.GetKeyUp(KeyCode.Escape))
+            {
+                ChangeState(EnemyState.Track);
+            }
         }
 
         public override void Deactivate()

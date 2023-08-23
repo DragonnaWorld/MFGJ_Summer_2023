@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class Vec3IHasher : IIndexHasher<Vector3Int>
 {
@@ -72,6 +73,16 @@ public class TerrainBuilder : MonoBehaviour
     readonly HashSet<Vector3Int> validTileLists = new();
     readonly Search<Vector3Int> pathfinder = new(new Vec3IHasher());
     public bool Available { get; private set; } = false;
+
+    private void Start()
+    {
+        allowMask = 0;
+        preventMask = 0;
+        foreach (var layer in AllowLayers)
+            allowMask |= 1 << LayerMask.NameToLayer(layer);
+        foreach (var layer in PreventLayers)
+            preventMask |= 1 << LayerMask.NameToLayer(layer);
+    }
 
     private void Update()
     {
@@ -151,45 +162,21 @@ public class TerrainBuilder : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OnValidate()
+    void OnDrawGizmosSelected()
     {
-        allowMask = 0;
-        preventMask = 0;
-        foreach (var layer in AllowLayers)
-            allowMask |= 1 << LayerMask.NameToLayer(layer);
-        foreach (var layer in PreventLayers)
-            preventMask |= 1 << LayerMask.NameToLayer(layer);
-    }
-
-    [ContextMenu("Visualise")]
-    void Visualise()
-    {
-        CalculateCellData();
-        ClearChildren();
+        if (!Available)
+            return;
         for (int x = -Dimension.x / 2; x <= Dimension.x / 2; ++x)
             for (int y = -Dimension.y / 2; y <= Dimension.y / 2; ++y)
                 for (int z = -Dimension.z / 2; z <= Dimension.z / 2; ++z)
                 {
-                    if (!validTileLists.Contains(new(x, y, z)))
+                    Vector3Int coordinate = new(x, y, z);
+                    if (!validTileLists.Contains(coordinate))
                         continue;
 
-                    var cube = new GameObject();
-                    cube.name = $"({x},{y},{z})";
-                    var collider = cube.AddComponent<BoxCollider>();
-                    collider.isTrigger = true;
-                    cube.transform.parent = transform;
-                    cube.transform.position = TileToPosition(new(x, y, z));
-                    cube.transform.localScale = CellSize;
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawWireCube(TileToPosition(coordinate), CellSize);
                 }
-    }
-
-    [ContextMenu("Clear children")]
-    void ClearChildren()
-    {
-        while (transform.childCount > 0)
-        {
-            DestroyImmediate(transform.GetChild(0).gameObject);
-        }
-    }
+    }  
 #endif
 }

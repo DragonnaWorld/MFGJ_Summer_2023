@@ -558,11 +558,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e630560800c2c7e4f8a64fd20b8a1d6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sensor: {fileID: 0}
-  Movement: {fileID: 0}
-  Rigidbody: {fileID: 0}
-  SpriteFlipper: {fileID: 931398193571190069}
-  Animator: {fileID: 931398192180816002}
+  <Sensor>k__BackingField: {fileID: 7934479361850904090}
+  <Movement>k__BackingField: {fileID: 1424643857580508793}
+  <Rigidbody>k__BackingField: {fileID: 931398193806565890}
+  <SpriteFlipper>k__BackingField: {fileID: 931398193571190069}
+  <Animator>k__BackingField: {fileID: 931398192180816002}
 --- !u!114 &5964917593954288733
 MonoBehaviour:
   m_ObjectHideFlags: 0

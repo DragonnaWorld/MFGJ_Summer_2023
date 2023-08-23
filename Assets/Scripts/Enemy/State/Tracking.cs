@@ -6,9 +6,9 @@ namespace Enemy
 {
     public class TrackState : Internal.State<EnemyState, EnemyInfo>
     {
-
         public override void Activate()
         {
+            info.Animator.Play(EnemyInfo.MoveName);
         }
 
         public override void Update()

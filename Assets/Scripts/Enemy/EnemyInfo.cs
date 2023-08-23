@@ -6,31 +6,13 @@ public class EnemyInfo : MonoBehaviour
 {
     public RelationshipTable RelationshipTable = RelationshipTable.Enemy;
 
-    [Header("Components")]
+    [field: Header("Components")]
+    [field: SerializeField] public Sensor Sensor { get; private set; }
+    [field: SerializeField] public Movement Movement { get; private set; }
+    [field: SerializeField] public Rigidbody Rigidbody { get; private set; }
+    [field: SerializeField] public SpriteFlipper SpriteFlipper { get; private set; }
+    [field: SerializeField] public Animator Animator { get; private set; }
 
-    [HideInInspector]
-    public Sensor Sensor;
-
-    [HideInInspector]
-    public Movement Movement;
-
-    [HideInInspector]
-    public Rigidbody Rigidbody;
-
-    public SpriteFlipper SpriteFlipper;
-
-    [Header("Animation")]
-
-    public Animator Animator;
-
-    // [Header("Idle")]
-
-    // [Header("Tracking")]
-
-    private void Start()
-    {
-        Sensor = GetComponent<Sensor>();
-        Movement = GetComponent<Movement>();
-        Rigidbody = GetComponent<Rigidbody>();
-    }
+    public static readonly string IdleName = "Base Layer.Idle";
+    public static readonly string MoveName = "Base Layer.Move";
 }
