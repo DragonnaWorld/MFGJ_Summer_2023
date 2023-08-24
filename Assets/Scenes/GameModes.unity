@@ -452,6 +452,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8e0c6ada070c27f4c94a0101b995a57b, type: 3}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
 --- !u!224 &323289997 stripped
@@ -1487,6 +1519,38 @@ PrefabInstance:
     - target: {fileID: 423859375869345991, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8e0c6ada070c27f4c94a0101b995a57b, type: 3}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555433454086893084, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b8a5392e5e8cb3489d5252880a721f6, type: 3}
