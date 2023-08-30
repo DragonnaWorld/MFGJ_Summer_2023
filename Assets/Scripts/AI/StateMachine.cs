@@ -65,12 +65,12 @@ namespace Internal
 
         void CheckStateChange()
         {
-            if (stateChanged)
+            while (stateChanged)
             {
                 states[currentState].Deactivate();
-                states[pendingState].Activate();
-                currentState = pendingState;
                 stateChanged = false;
+                currentState = pendingState;
+                states[pendingState].Activate();
             }
         }
     }

@@ -18,6 +18,11 @@ namespace Internal
             return Relationship.Ignore;
         }
 
+        public bool WillAttack(string gameObjectTag)
+        {
+            return RelationshipTo(gameObjectTag) == Relationship.Attack;
+        }
+
         public static RelationshipTable Enemy = new()
         {
             table = new()

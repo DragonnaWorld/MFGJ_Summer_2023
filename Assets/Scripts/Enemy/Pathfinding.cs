@@ -6,37 +6,30 @@ public class Pathfinding : MonoBehaviour
     [SerializeField]
     TerrainBuilder builder;
 
-    [SerializeField]
-    Transform target;
+    List<Vector3> path;
 
-    [SerializeField]
-    [Range(1F, 10F)]
-    float refreshInterval = 5f;
-    float remaining;
-
-    List<Vector3> path = new();
-
-    private void Update()
+    public bool FindPathToPosition(Vector3 destination, out List<Vector3> path)
     {
-        remaining -= Time.deltaTime;
-        if (remaining < 0)
-        {
-            FindPath();
-            remaining = refreshInterval;
-        }
-    }
-
-    [ContextMenu("Visualise")]
-    public void FindPath()
-    {
-        if (builder.Available && builder.AStarPathfinding(transform.position, target.position, out List<Vector3> path))
+        path = null;
+        if (!builder.Available)
+            return false;
+        if (builder.AStarPathfinding(transform.position, destination, out path))
         {
             this.path = path;
+            return true;
+        }
+        else
+        {
+            this.path = null;
+            return false;
         }
     }
+
 #if UNITY_EDITOR
     public void OnDrawGizmosSelected()
     {
+        if (path == null)
+            return;
         for (int i = 0; i + 1 < path.Count; ++i)
             Debug.DrawLine(path[i], path[i + 1], Color.blue);
     }

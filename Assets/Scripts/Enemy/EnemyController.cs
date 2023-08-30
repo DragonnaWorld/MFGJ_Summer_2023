@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-
 public enum EnemyState
 {
-    Idle, Track,
+    Idle, Track, Attack
 }
 
 namespace Internal
@@ -14,7 +12,9 @@ namespace Internal
             : base(info, EnemyState.Idle)
         {
             Register<Enemy.IdleState>(EnemyState.Idle);
-            Register<Enemy.TrackState>(EnemyState.Track);
+            //Register<Enemy.SightTrackState>(EnemyState.Track);
+            Register<Enemy.PathfindingTrackState>(EnemyState.Track);
+            Register<Enemy.AttackState>(EnemyState.Attack);
         }
     }
 }

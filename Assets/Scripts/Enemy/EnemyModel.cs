@@ -9,8 +9,8 @@ public class EnemyModel : IModel<EnemyInfo>
 
     protected override void UpdateModel()
     {
-        bool runningLeft = info.Rigidbody.velocity.x < -1;
-        bool runningRight = info.Rigidbody.velocity.x > 1;
+        bool runningLeft = info.Movement.CurrentAngle > 180F;
+        bool runningRight = info.Movement.CurrentAngle < 180F;
         if (runningLeft)
             info.SpriteFlipper.TurnLeft();
         else if (runningRight)

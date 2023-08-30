@@ -107,24 +107,10 @@ public class Sensor : MonoBehaviour
             HitInfo info;
             float weight = 2F * (sensorIndex / (float)(Count - 1) - 0.5F);
             if (Physics.Raycast(emissionPoint, sensor, out RaycastHit hitInfo, Length, layerMask))
-            {
                 info = new(weight, true, hitInfo.distance / Length, hitInfo.collider.gameObject);
-#if UNITY_EDITOR
-                if (Application.isPlaying)
-                {
-                    Debug.DrawRay(emissionPoint, sensor.normalized * hitInfo.distance, Color.red);
-                }
-#endif
-            }
             else
-            {
                 info = new(weight, false, -1, null);
 
-#if UNITY_EDITOR
-                if (Application.isPlaying)
-                    Debug.DrawRay(emissionPoint, sensor, Color.green);
-#endif
-            }
             sensorsStatus.Add(info);
         }
 
@@ -164,10 +150,17 @@ public class Sensor : MonoBehaviour
     {
         InitializeLocalSensors();
     }
+
     private void OnDrawGizmosSelected()
     {
-        foreach (var sensor in sensorsGlobalSpace)
-            Debug.DrawRay(emissionPoint, sensor, Color.green);
+        GetCurrentStatus();
+        for (int i = 0; i < sensorsGlobalSpace.Count; ++i)
+        {
+            if (sensorsStatus[i].hit)
+                Debug.DrawRay(emissionPoint, sensorsGlobalSpace[i] * sensorsStatus[i].ratio, Color.red);
+            else
+                Debug.DrawRay(emissionPoint, sensorsGlobalSpace[i], Color.green);
+        }
     }
 #endif
 }

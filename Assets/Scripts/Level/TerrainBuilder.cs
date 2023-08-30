@@ -106,14 +106,14 @@ public class TerrainBuilder : MonoBehaviour
 
     Vector3Int PositionToTile(Vector3 pos)
     {
-        return new(Mathf.RoundToInt((pos.x - Center.x) / CellSize.x),
-            Mathf.RoundToInt((pos.y - Center.y) / CellSize.y),
-            Mathf.RoundToInt((pos.z - Center.z) / CellSize.z));
+        return new(Mathf.FloorToInt((pos.x - Center.x) / CellSize.x),
+            Mathf.FloorToInt((pos.y - Center.y) / CellSize.y),
+            Mathf.FloorToInt((pos.z - Center.z) / CellSize.z));
     }
 
     Vector3 TileToPosition(Vector3Int tile)
     {
-        return new(tile.x * CellSize.x + Center.x, 
+        return CellSize / 2F + new Vector3(tile.x * CellSize.x + Center.x, 
             tile.y * CellSize.y + Center.y, 
             tile.z * CellSize.z + Center.z);
     }
@@ -175,7 +175,7 @@ public class TerrainBuilder : MonoBehaviour
                         continue;
 
                     Gizmos.color = Color.white;
-                    Gizmos.DrawWireCube(TileToPosition(coordinate), CellSize);
+                    Gizmos.DrawWireCube(TileToPosition(coordinate) + CellSize / 2F, CellSize);
                 }
     }  
 #endif
