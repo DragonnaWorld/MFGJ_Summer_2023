@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 namespace Enemy
@@ -14,6 +15,7 @@ namespace Enemy
         List<Vector3> path;
 
         int currentNodeIndex;
+        float outOfNodeTimer;
 
         float waitTimeBeforeIdle;
 
@@ -62,7 +64,10 @@ namespace Enemy
                     currentNodeIndex = 0;
                     info.Animator.PlayRestart(EnemyInfo.MoveName);
                     if (info.Pathfinder.FindPathToPosition(goal, out path))
+                    {
                         status = Status.PathOnGoing;
+                        outOfNodeTimer = 0;
+                    }
                     else
                         status = Status.Scouting;
                 }
@@ -73,15 +78,20 @@ namespace Enemy
                 bool isInNode = offset.magnitude < info.NodeRange;
                 if (!isInNode)
                 {
-                    float targetAngle = Mathf.Abs(offset.z) <= 1e-5F ? (offset.x >= 0 ? 90 : -90) : Mathf.Rad2Deg * Mathf.Acos(offset.z / offset.magnitude) * (offset.x >= 0 ? 1 : -1); ;
+                    outOfNodeTimer += Time.deltaTime;
+                    float targetAngle = Mathf.Rad2Deg * Mathf.Acos(offset.z / offset.magnitude) * (offset.x >= 0 ? 1F : -1F); ;
                     float deltaAngle = AngleNormalizer.ShortestDifference360(info.Movement.CurrentAngle, targetAngle);
-                    info.Movement.SetTurn(deltaAngle / 60F);
-                    float angleFactor = 1F - Mathf.Clamp01(deltaAngle / 90F);
-                    float distanceFactor = Mathf.Clamp01(offset.magnitude / 4F / info.NodeRange);
-                    info.Movement.SetSpeed(angleFactor * distanceFactor);
+                    info.Movement.SetTurn(deltaAngle / info.LinearTurnAngel);
+                    float angleFactor = 1F - Mathf.Clamp01(deltaAngle / info.LinearTurnAngel);
+                    float distanceFactor = Mathf.Clamp01(offset.magnitude / 2F / info.NodeRange);
+                    float timeFactor = 1F - Mathf.Clamp01(outOfNodeTimer / info.LinearNodeTimer);
+                    if (Mathf.Abs(deltaAngle) < 15F)
+                        timeFactor = 1F;
+                    info.Movement.SetSpeed(angleFactor * distanceFactor * timeFactor);
                 }
                 else
                 {
+                    outOfNodeTimer = 0F;
                     if (currentNodeIndex == path.Count - 1)
                     {
                         status = Status.Scouting;
