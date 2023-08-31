@@ -82,8 +82,13 @@ namespace Enemy
                     float targetAngle = Mathf.Rad2Deg * Mathf.Acos(offset.z / offset.magnitude) * (offset.x >= 0 ? 1F : -1F); ;
                     float deltaAngle = AngleNormalizer.ShortestDifference360(info.Movement.CurrentAngle, targetAngle);
                     info.Movement.SetTurn(deltaAngle / info.LinearTurnAngel);
+                    // The greater the delta angle the lower the speed
                     float angleFactor = 1F - Mathf.Clamp01(deltaAngle / info.LinearTurnAngel);
+                    // The greater the distance the greater the speed
                     float distanceFactor = Mathf.Clamp01(offset.magnitude / 2F / info.NodeRange);
+                    // The more time it took to reach current node, the lower the speed
+                    // If time is more than a fixed limit, stop moving to aligh
+                    // When the directions are aligned, time factor has no effects
                     float timeFactor = 1F - Mathf.Clamp01(outOfNodeTimer / info.LinearNodeTimer);
                     if (Mathf.Abs(deltaAngle) < 15F)
                         timeFactor = 1F;
