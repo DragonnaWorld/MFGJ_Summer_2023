@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using KDTree;
 
 public class Vec3IHasher : IIndexHasher<Vector3Int>
 {
@@ -71,6 +72,7 @@ public class TerrainBuilder : MonoBehaviour
 
     readonly HashSet<Vector3Int> validTileLists = new();
     readonly Search<Vector3Int> pathfinder = new(new Vec3IHasher());
+    Tree<int> kdTree;
     public bool Available { get; private set; } = false;
 
     private void Start()
@@ -95,12 +97,20 @@ public class TerrainBuilder : MonoBehaviour
     public bool AStarPathfinding(Vector3 start, Vector3 end, out List<Vector3> path)
     {
         path = new();
-        if (!pathfinder.AStarPathfinding(PositionToTile(start), PositionToTile(end),
+        
+        if (!pathfinder.AStarPathfinding(ClosestValidTile(start), ClosestValidTile(end),
             Heuristic3D.Euclid, out List<Vector3Int> pathInTile))
                 return false;
         foreach (var tile in pathInTile)
             path.Add(TileToPosition(tile));
         return true;
+    }
+
+    Vector3Int ClosestValidTile(Vector3 worldPosition)
+    {
+        var tile = PositionToTile(worldPosition);
+        var closestValidPoint = kdTree.FindNearest(new(tile.x, tile.y, tile.z));
+        return new(closestValidPoint[0], closestValidPoint[1], closestValidPoint[2]);
     }
 
     Vector3Int PositionToTile(Vector3 pos)
@@ -136,6 +146,8 @@ public class TerrainBuilder : MonoBehaviour
                     validTileLists.Add(tile);
                     pathfinder.Add(tile, 1);
                 }
+        // Create the tree
+        kdTree = new(3, ConvertToTreeFormat(validTileLists));
         // Add pathfinder connections
         for (int x = -Dimension.x / 2; x <= Dimension.x / 2; ++x)
             for (int y = -Dimension.y / 2; y <= Dimension.y / 2; ++y)
@@ -157,6 +169,16 @@ public class TerrainBuilder : MonoBehaviour
                         }
                     pathfinder.Connect(tile, adjacents);
                 }
+    }
+
+    List<Point<int>> ConvertToTreeFormat(HashSet<Vector3Int> list)
+    {
+        var res = new List<Point<int>>();
+        foreach (var item in list)
+        {
+            res.Add(new(item.x, item.y, item.z));
+        }
+        return res;
     }
 
 #if UNITY_EDITOR

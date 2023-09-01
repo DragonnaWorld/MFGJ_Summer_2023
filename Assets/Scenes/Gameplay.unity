@@ -1543,7 +1543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3133767a60c98044b80d874d5ed37633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dimension: {x: 30, y: 1, z: 30}
+  Dimension: {x: 50, y: 1, z: 50}
   Center: {x: 0, y: 0, z: 0}
   CellSize: {x: 4, y: 4, z: 4}
   PreventLayers:
@@ -1795,7 +1795,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.6751247, b: 0.60784316, a: 1}
+  m_Color: {r: 0.8867924, g: 0.6757935, b: 0.1622997, a: 1}
   m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
