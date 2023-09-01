@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class Vec3IHasher : IIndexHasher<Vector3Int>
 {
@@ -118,7 +117,6 @@ public class TerrainBuilder : MonoBehaviour
             tile.z * CellSize.z + Center.z);
     }
 
-    [ContextMenu("Bake terrain")]
     void CalculateCellData()
     {
         pathfinder.Clear();
@@ -175,7 +173,7 @@ public class TerrainBuilder : MonoBehaviour
                         continue;
 
                     Gizmos.color = Color.white;
-                    Gizmos.DrawWireCube(TileToPosition(coordinate) + CellSize / 2F, CellSize);
+                    Gizmos.DrawWireCube(TileToPosition(coordinate), CellSize);
                 }
     }  
 #endif
