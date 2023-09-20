@@ -11,22 +11,22 @@ TagManager:
   - 
   - Water
   - UI
-  - Backgroud
+  - Backgroud_Render
+  - Foreground_Render
   - 
   - 
   - 
-  - 
-  - Enemy
-  - Player
-  - 
-  - 
-  - Ground
-  - Obstacle
+  - Enemy_Render
+  - Player_Render
   - 
   - 
+  - Walkable_NoRender
+  - Obstacle_NoRender
+  - Scene_Render
+  - Obstacle_Render
   - 
-  - Hitbox
-  - Hurtbox
+  - Hitbox_NoRender
+  - Hurtbox_NoRender
   - 
   - 
   - 

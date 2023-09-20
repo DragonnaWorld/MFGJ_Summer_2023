@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +14,7 @@ public class Hitbox : MonoBehaviour
 
     private void Start()
     {
-        gameObject.layer = LayerMask.NameToLayer("Hitbox");
+        gameObject.layer = LayerMask.NameToLayer(Internal.LayerConfig.Hitbox);
     }
 
     private void OnTriggerEnter(Collider hurtbox)

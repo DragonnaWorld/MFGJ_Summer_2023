@@ -27,7 +27,7 @@ namespace Internal
         {
             table = new()
             {
-                { Relationship.Attack, new HashSet<string> { "Player" } }
+                { Relationship.Attack, new HashSet<string> { LayerConfig.Player } }
             }
         };
     }

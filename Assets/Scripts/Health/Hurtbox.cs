@@ -15,7 +15,7 @@ public class Hurtbox : MonoBehaviour
 
     private void Start()
     {
-        gameObject.layer = LayerMask.NameToLayer("Hurtbox");
+        gameObject.layer = LayerMask.NameToLayer(Internal.LayerConfig.Hurtbox);
         ID = IDManager.Generate();
     }
 
